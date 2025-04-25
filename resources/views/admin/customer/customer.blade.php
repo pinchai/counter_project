@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">User Page</h1>
+                        <h1 class="m-0">Customer Page</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">User Page</li>
+                            <li class="breadcrumb-item active">Customer Page</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -33,51 +33,78 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title" id="staticBackdropLabel">USER</h3>
+                        <h3 class="modal-title" id="staticBackdropLabel">Customer</h3>
                     </div>
                     <div class="modal-body">
                         <form>
                             <div class="form-row">
-                                {{--Username--}}
+                                {{--name--}}
                                 <div class="form-group col-12">
-                                    <label for="Username">Username</label>
+                                    <label for="name">Name</label>
                                     <input
-                                        v-model="form.username"
+                                        v-model="form.name"
                                         type="text"
                                         class="form-control"
-                                        id="Username"
-                                        name="username"
+                                        id="name"
+                                        name="name"
                                     >
                                 </div>
-                                {{--Email--}}
+                                {{--phone--}}
                                 <div class="form-group col-12">
-                                    <label for="Email">Email</label>
+                                    <label for="phone">Phone</label>
                                     <input
-                                        v-model="form.email"
-                                        type="email"
+                                        v-model="form.phone"
+                                        type="text"
                                         class="form-control"
-                                        id="Email"
-                                        name="email"
+                                        id="phone"
+                                        name="phone"
                                     >
                                 </div>
-                                {{--Password--}}
+                                {{--alt_phone--}}
                                 <div class="form-group col-12">
-                                    <label for="Password">Password</label>
+                                    <label for="alt_phone">Alt Phone</label>
                                     <input
-                                        v-model="form.password"
-                                        type="password"
+                                        v-model="form.alt_phone"
+                                        type="text"
                                         class="form-control"
-                                        id="Password"
-                                        name="password"
+                                        id="alt_phone"
+                                        name="alt_phone"
                                     >
                                 </div>
-                                {{--Role--}}
+                                {{--point--}}
                                 <div class="form-group col-12">
-                                    <label for="role">Role</label>
-                                    <select v-model="form.role" class="form-control" id="role" name="role">
-                                        <option value="admin">Admin</option>
-                                        <option value="user">User</option>
+                                    <label for="point">Point</label>
+                                    <input
+                                        v-model="form.point"
+                                        type="number"
+                                        class="form-control"
+                                        id="point"
+                                        name="point"
+                                    >
+                                </div>
+                                {{--set defualt--}}
+                                <div class="form-group col-12">
+                                    <label for="set_default">Set Default</label>
+                                    <select
+                                        class="form-control"
+                                        id="set_default"
+                                        v-model="form.default"
+                                    >
+                                        <option value="1">Is Default</option>
+                                        <option value="0">Not Default</option>
                                     </select>
+                                </div>
+                                {{--current_location--}}
+                                <div class="form-group col-12">
+                                    <label for="current_location">Current Location</label>
+                                    <textarea
+                                        rows="5"
+                                        v-model="form.current_location"
+                                        type="number"
+                                        class="form-control"
+                                        id="current_location"
+                                        name="current_location"
+                                    ></textarea>
                                 </div>
                             </div>
                         </form>
@@ -90,7 +117,7 @@
                         >Cancel
                         </button>
                         <button
-                            @click="addUser()"
+                            @click="addCustomer()"
                             v-if="status == 'add'"
                             type="button"
                             class="btn btn-primary"
@@ -98,7 +125,7 @@
                         </button>
 
                         <button
-                            @click="editUser()"
+                            @click="editCustomer()"
                             v-if="status == 'edit'"
                             type="button"
                             class="btn btn-primary"
@@ -123,25 +150,35 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="user_table" class="table table-striped table-borderless">
+                                    <table id="customer_table" class="table table-striped table-borderless">
                                         <thead>
                                         <tr class="btn-primary">
                                             <th>No.</th>
-                                            <th>UserName</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
+                                            <th>Name</th>
+                                            <th>Phone</th>
+                                            <th>Alt Phone</th>
+                                            <th>Point</th>
+                                            <th>Address</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr
-                                            v-for="(item, index) in user_list"
-                                            :key="'user_list_'+index"
+                                            v-for="(item, index) in customer_list"
+                                            :key="'customer_list_'+index"
                                         >
                                             <td>[[ index+1 ]]</td>
-                                            <td>[[ item.name ]]</td>
-                                            <td>[[ item.email ]]</td>
-                                            <td>[[ item.role ]]</td>
+                                            <td>
+                                                [[ item.name ]]
+                                                <span
+                                                    v-if="item.default == 1"
+                                                    class="badge badge-success"
+                                                >is default</span>
+                                            </td>
+                                            <td>[[ item.phone ]]</td>
+                                            <td>[[ item.alt_phone ]]</td>
+                                            <td>[[ item.point ]]</td>
+                                            <td>[[ item.current_location ]]</td>
                                             <td>
                                                 <a
                                                     @click="getEdit(item)"
@@ -183,22 +220,24 @@
             },
             data: {
                 status: 'add',
-                user_list: [],
+                customer_list: [],
                 form: {
                     id: null,
-                    username: null,
-                    email: null,
-                    password: null,
-                    role: 'user',
+                    name: null,
+                    phone: null,
+                    alt_phone: null,
+                    point: null,
+                    default: 0,
+                    current_location: null,
                 }
             },
             methods: {
                 fetchData() {
                     let vm = this
-                    axios.get('/admin/get-user')
+                    axios.get('/admin/get-customer')
                         .then(function (response) {
                             // handle success
-                            vm.user_list = response.data
+                            vm.customer_list = response.data
                             $.LoadingOverlay("hide");
                         })
                         .catch(function (error) {
@@ -211,9 +250,9 @@
                 closeModal() {
                     $('#staticBackdrop').modal('hide')
                 },
-                addUser() {
+                addCustomer() {
                     let vm = this
-                    axios.post('/admin/add-user', vm.form)
+                    axios.post('/admin/add-customer', vm.form)
                         .then(function (response) {
                             if (response.status == 200) {
                                 $.LoadingOverlay("hide");
@@ -226,15 +265,19 @@
                 },
                 getEdit(item) {
                     this.form.id = item.id
-                    this.form.username = item.name
-                    this.form.email = item.email
-                    this.form.role = item.role
+                    this.form.name = item.name
+                    this.form.phone = item.phone
+                    this.form.alt_phone = item.alt_phone
+                    this.form.point = item.point
+                    this.form.default = item.default
+                    this.form.current_location = item.current_location
+
                     this.status = 'edit'
                     this.showModal()
                 },
-                editUser() {
+                editCustomer() {
                     let vm = this
-                    axios.post('/admin/edit-user', vm.form)
+                    axios.post('/admin/edit-customer', vm.form)
                         .then(function (response) {
                             if (response.status == 200) {
                                 $.LoadingOverlay("hide");
@@ -264,7 +307,7 @@
                         reverseButtons: true
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            axios.post('/admin/delete-user', {id: item.id})
+                            axios.post('/admin/delete-customer', {id: item.id})
                                 .then(function (response) {
                                     if (response.status == 200) {
                                         $.LoadingOverlay("hide");
@@ -280,10 +323,11 @@
                     //
                     this.status = 'add'
                     this.form.id = null
-                    this.form.username = null
-                    this.form.email = null
-                    this.form.password = null
-                    this.form.role = 'user'
+                    this.form.name = null
+                    this.form.phone = null
+                    this.form.alt_phone = null
+                    this.form.point = null
+                    this.form.current_location = null
                     this.closeModal()
                 }
             }

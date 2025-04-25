@@ -11,73 +11,62 @@ class UserController extends Controller
     //
     public function index(Request $request){
         $module = 'user';
-        $user = DB::table('users')
-            ->get();
         return view('admin.user.user',
-            [
-                'module'=>$module,
-                'user'=>$user,
-            ]
+            ['module'=>$module,]
         );
     }
-    public function addUser(Request $request){
-        $module = 'user';
-        return view('admin.user.add', ['module'=>$module]);
+
+    public function getUser(Request $request){
+        $data = DB::table('users')->select('*')->get();
+        return response()->json($data);
     }
-    public function editUser(Request $request){
-        $module = 'user';
-        return view('admin.user.edit', ['module'=>$module]);
-    }
+
     public function deleteUser(Request $request){
-        $module = 'user';
-        return view('admin.user.delete', ['module'=>$module]);
+        $user_id = $request->id;
+        $res = DB::table('users')->where('id', $user_id)->delete();
+        return response()->json($res);
     }
-    public function createUser(Request $request){
-        $user_name = $request->username;
+
+    public function addUser(Request $request)
+    {
+        $username = $request->username;
         $email = $request->email;
         $password = $request->password;
         $role = $request->role;
+
         $user = DB::table('users')->insert([
             [
-                'name' => $user_name,
+                'name' => $username,
                 'email' => $email,
                 'password'=>Hash::make($password),
                 'role'=>$role,
+                'branch_id'=>1,
             ],
         ]);
-        return redirect('/admin/user');
+
+        return response()->json($user);
     }
 
-    public function doEdit(Request $request){
-        $id = $request->user_id;
-        $user_name = $request->username;
+    public function editUser(Request $request)
+    {
+        $id = $request->id;
+        $username = $request->username;
         $email = $request->email;
+        $role = $request->role;
+
         $user = DB::table('users')
             ->where('id', $id)
             ->update(
                 [
-                    'name' => $user_name,
-                    'email' => $email
+                    'name' => $username,
+                    'email' => $email,
+                    'role' => $role,
                 ]
             );
 
-        return redirect('/register-list');
-    }
-
-    public function confirmDelete(Request $request){
-        $user_id = $request->id;
-        $current_user = DB::table('users')
-            ->where('id',  $user_id)
+        $new_update = DB::table('users')
+            ->where('id', $id)
             ->first();
-        return view('confirm_delete', ['current_user'=>$current_user]);
-    }
-
-    public function getEdit(Request $request){
-        $user_id = $request->id;
-        $current_user = DB::table('users')
-            ->where('id',  $user_id)
-            ->first();
-
-        return view('get_edit', ['current_user'=>$current_user]);
+        return response()->json($new_update);
     }
 }

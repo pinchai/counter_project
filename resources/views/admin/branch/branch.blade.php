@@ -7,12 +7,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">User Page</h1>
+                        <h1 class="m-0">Branch Page</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">User Page</li>
+                            <li class="breadcrumb-item active">Branch Page</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -33,23 +33,62 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title" id="staticBackdropLabel">USER</h3>
+                        <h3 class="modal-title" id="staticBackdropLabel">Branch</h3>
                     </div>
                     <div class="modal-body">
                         <form>
                             <div class="form-row">
-                                {{--Username--}}
+                                {{--name--}}
                                 <div class="form-group col-12">
-                                    <label for="Username">Username</label>
+                                    <label for="name">Name</label>
                                     <input
-                                        v-model="form.username"
+                                        v-model="form.name"
                                         type="text"
                                         class="form-control"
-                                        id="Username"
-                                        name="username"
+                                        id="name"
                                     >
                                 </div>
-                                {{--Email--}}
+                                {{--logo--}}
+                                <div class="form-group col-12">
+                                    <label for="logo">Logo</label>
+                                    <input
+                                        v-model="form.logo"
+                                        type="text"
+                                        class="form-control"
+                                        id="logo"
+                                    >
+                                </div>
+                                {{--location--}}
+                                <div class="form-group col-12">
+                                    <label for="location">Location</label>
+                                    <input
+                                        v-model="form.location"
+                                        type="text"
+                                        class="form-control"
+                                        id="location"
+                                    >
+                                </div>
+                                {{--phone--}}
+                                <div class="form-group col-12">
+                                    <label for="phone">Phone</label>
+                                    <input
+                                        v-model="form.phone"
+                                        type="text"
+                                        class="form-control"
+                                        id="phone"
+                                    >
+                                </div>
+                                {{--alt phone--}}
+                                <div class="form-group col-12">
+                                    <label for="alt_phone">Alt Phone</label>
+                                    <input
+                                        v-model="form.alt_phone"
+                                        type="text"
+                                        class="form-control"
+                                        id="alt_phone"
+                                    >
+                                </div>
+                                {{--email--}}
                                 <div class="form-group col-12">
                                     <label for="Email">Email</label>
                                     <input
@@ -59,25 +98,6 @@
                                         id="Email"
                                         name="email"
                                     >
-                                </div>
-                                {{--Password--}}
-                                <div class="form-group col-12">
-                                    <label for="Password">Password</label>
-                                    <input
-                                        v-model="form.password"
-                                        type="password"
-                                        class="form-control"
-                                        id="Password"
-                                        name="password"
-                                    >
-                                </div>
-                                {{--Role--}}
-                                <div class="form-group col-12">
-                                    <label for="role">Role</label>
-                                    <select v-model="form.role" class="form-control" id="role" name="role">
-                                        <option value="admin">Admin</option>
-                                        <option value="user">User</option>
-                                    </select>
                                 </div>
                             </div>
                         </form>
@@ -89,16 +109,9 @@
                             class="btn btn-danger"
                         >Cancel
                         </button>
-                        <button
-                            @click="addUser()"
-                            v-if="status == 'add'"
-                            type="button"
-                            class="btn btn-primary"
-                        >Save
-                        </button>
 
                         <button
-                            @click="editUser()"
+                            @click="editBranch()"
                             v-if="status == 'edit'"
                             type="button"
                             class="btn btn-primary"
@@ -116,10 +129,6 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a @click="showModal()" href="#" class="btn btn-primary">
-                                    <i class="fas fa-plus-circle"></i>
-                                    Add
-                                </a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -127,21 +136,27 @@
                                         <thead>
                                         <tr class="btn-primary">
                                             <th>No.</th>
-                                            <th>UserName</th>
+                                            <th>Name</th>
+                                            <th>logo</th>
+                                            <th>location</th>
+                                            <th>phone</th>
+                                            <th>alt_phone</th>
                                             <th>Email</th>
-                                            <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr
-                                            v-for="(item, index) in user_list"
-                                            :key="'user_list_'+index"
+                                            v-for="(item, index) in branch_list"
+                                            :key="'branch_list_'+index"
                                         >
                                             <td>[[ index+1 ]]</td>
                                             <td>[[ item.name ]]</td>
+                                            <td>[[ item.logo ]]</td>
+                                            <td>[[ item.location ]]</td>
+                                            <td>[[ item.phone ]]</td>
+                                            <td>[[ item.alt_phone ]]</td>
                                             <td>[[ item.email ]]</td>
-                                            <td>[[ item.role ]]</td>
                                             <td>
                                                 <a
                                                     @click="getEdit(item)"
@@ -149,13 +164,6 @@
                                                     class="btn btn-sm btn-secondary"
                                                 >
                                                     <i class="far fa-edit"></i>
-                                                </a>
-                                                <a
-                                                    @click="deleteRecord(item)"
-                                                    href="#"
-                                                    class="btn btn-sm btn-danger"
-                                                >
-                                                    <i class="far fa-trash-alt"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -183,26 +191,26 @@
             },
             data: {
                 status: 'add',
-                user_list: [],
+                branch_list: [],
                 form: {
                     id: null,
-                    username: null,
+                    name: null,
+                    logo: null,
+                    location: null,
+                    phone: null,
+                    alt_phone: null,
                     email: null,
-                    password: null,
-                    role: 'user',
                 }
             },
             methods: {
                 fetchData() {
                     let vm = this
-                    axios.get('/admin/get-user')
+                    axios.get('/admin/get-branch')
                         .then(function (response) {
                             // handle success
-                            vm.user_list = response.data
-                            $.LoadingOverlay("hide");
+                            vm.branch_list = response.data
                         })
                         .catch(function (error) {
-                            // handle error
                         })
                 },
                 showModal() {
@@ -211,70 +219,28 @@
                 closeModal() {
                     $('#staticBackdrop').modal('hide')
                 },
-                addUser() {
-                    let vm = this
-                    axios.post('/admin/add-user', vm.form)
-                        .then(function (response) {
-                            if (response.status == 200) {
-                                $.LoadingOverlay("hide");
-                                vm.resetForm();
-                                vm.fetchData()
-                            }
-                        })
-                        .catch(function (error) {
-                        });
-                },
                 getEdit(item) {
                     this.form.id = item.id
-                    this.form.username = item.name
+                    this.form.name = item.name
+                    this.form.logo = item.logo
+                    this.form.location = item.location
+                    this.form.phone = item.phone
+                    this.form.alt_phone = item.alt_phone
                     this.form.email = item.email
-                    this.form.role = item.role
                     this.status = 'edit'
                     this.showModal()
                 },
-                editUser() {
+                editBranch() {
                     let vm = this
-                    axios.post('/admin/edit-user', vm.form)
+                    axios.post('/admin/edit-branch', vm.form)
                         .then(function (response) {
-                            if (response.status == 200) {
-                                $.LoadingOverlay("hide");
+                            if (response.status == 200){
                                 vm.resetForm();
                                 vm.fetchData()
                             }
                         })
                         .catch(function (error) {
                         });
-                },
-                deleteRecord(item) {
-                    let vm = this
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                            confirmButton: "btn btn-success",
-                            cancelButton: "btn btn-danger"
-                        },
-                        buttonsStyling: false
-                    });
-                    swalWithBootstrapButtons.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Yes, delete it!",
-                        cancelButtonText: "No, cancel!",
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            axios.post('/admin/delete-user', {id: item.id})
-                                .then(function (response) {
-                                    if (response.status == 200) {
-                                        $.LoadingOverlay("hide");
-                                        vm.fetchData()
-                                    }
-                                })
-                                .catch(function (error) {
-                                });
-                        }
-                    });
                 },
                 resetForm() {
                     //
